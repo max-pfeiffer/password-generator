@@ -34,6 +34,15 @@ source .venv/bin/activate
 pip install -r requirements.txt -r requirements-dev.txt
 ```
 
+### Add .env file
+For running the application locally with a custom configuration (also when using
+docker-compose) you need to have a ```.env``` file placed in project root.
+This file is not checked into the repo.
+You can use the ```.env-example``` as a template like so:
+```shell
+cp .env-example .env
+```
+
 ### Code Formatting
 I choose to add black as dependency for doing automatic code formatting.
 Manual code formatting is time-consuming. This way the software engineer can
