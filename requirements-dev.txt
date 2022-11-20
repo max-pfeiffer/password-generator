@@ -1,0 +1,10 @@
+# These are the dependencies only needed for development. I choose to have
+# clear separation of dependencies needed for running the application in
+# production and the dependencies needed for development purposes.
+# The development dependencies are not needed in the final production Docker
+# image and can be installed separately with this extra file.
+
+pytest == 7.2.0
+black == 22.10.0
+pylint == 2.15.6
+pre-commit == 2.20.0

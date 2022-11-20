@@ -1,0 +1,14 @@
+# I choose to have a pyproject.toml file because this can be used as a
+# single configuration file for all the tools this project uses
+# https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/
+
+# https://docs.pytest.org/en/latest/reference/customize.html
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
+[tool.black]
+line-length = 80
+target-version = ["py39"]
