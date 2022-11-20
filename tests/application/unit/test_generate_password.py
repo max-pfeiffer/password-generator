@@ -1,15 +1,17 @@
 """
 Tests for Password  Generation
 """
+# pylint: disable=duplicate-code
+
 import pytest
 
-from app.services.exceptions import PasswordToShortError, PasswordToLongError
 from app.services.password import (
     generate_password,
     NUMBERS,
     LOWER_CASE_CHARS,
     UPPER_CASE_CHARS,
     SPECIAL_SYMBOLS,
+    GeneratePasswordError,
 )
 
 
@@ -35,10 +37,31 @@ def test_generate_password(
     :param password_special_symbols:
     :return:
     """
-    # pylint: disable=duplicate-code
-    # pylint: disable=unsupported-membership-test
     # pylint: disable=too-many-branches
 
+    # Test handling of invalid flag combination
+    if (
+        sum(
+            [
+                password_numbers,
+                password_lower_case_chars,
+                password_upper_case_chars,
+                password_special_symbols,
+            ]
+        )
+        == 0
+    ):
+        with pytest.raises(GeneratePasswordError):
+            generate_password(
+                password_length=password_length,
+                password_numbers=password_numbers,
+                password_lower_case_chars=password_lower_case_chars,
+                password_upper_case_chars=password_upper_case_chars,
+                password_special_symbols=password_special_symbols,
+            )
+        return
+
+    # Test all the other successful cases
     password: str = generate_password(
         password_length=password_length,
         password_numbers=password_numbers,
@@ -76,7 +99,7 @@ def test_generate_too_short_password():
 
     :return:
     """
-    with pytest.raises(PasswordToShortError):
+    with pytest.raises(GeneratePasswordError):
         generate_password(password_length=5)
 
 
@@ -86,5 +109,5 @@ def test_generate_too_long_password():
 
     :return:
     """
-    with pytest.raises(PasswordToLongError):
+    with pytest.raises(GeneratePasswordError):
         generate_password(password_length=500)
