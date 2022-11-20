@@ -68,7 +68,7 @@ def generate_password(
     if flags_set == 0:
         raise GeneratePasswordInvalidFlagsError(
             "At least one flag needs to be specified: password_numbers, "
-            "password_lower_case_chars, password_upper_case_chars, "
+            "password_lower_case_chars, password_upper_case_chars or "
             "password_special_symbols"
         )
 

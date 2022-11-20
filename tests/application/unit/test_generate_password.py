@@ -31,11 +31,11 @@ def test_generate_password(
     """
     Parameterised test for successful password generation.
 
-    :param password_length:
-    :param password_numbers:
-    :param password_lower_case_chars:
-    :param password_upper_case_chars:
-    :param password_special_symbols:
+    :param password_length: int
+    :param password_numbers: bool
+    :param password_lower_case_chars: bool
+    :param password_upper_case_chars: bool
+    :param password_special_symbols: bool
     :return:
     """
     # pylint: disable=too-many-branches
@@ -107,6 +107,10 @@ def test_generate_too_short_password(
     """
     Test for failed password generation.
 
+    :param password_numbers: int
+    :param password_lower_case_chars: bool
+    :param password_upper_case_chars: bool
+    :param password_special_symbols: bool
     :return:
     """
     with pytest.raises(GeneratePasswordError):
@@ -132,6 +136,10 @@ def test_generate_too_long_password(
     """
     Test for failed password generation.
 
+    :param password_numbers: int
+    :param password_lower_case_chars: bool
+    :param password_upper_case_chars: bool
+    :param password_special_symbols: bool
     :return:
     """
     with pytest.raises(GeneratePasswordError):

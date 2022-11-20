@@ -12,6 +12,8 @@ class ApplicationSettings(BaseSettings):
     It loads automatically all environments variables and overrides the
     defaults.
 
+    This way we save a lot of boilerplate code. This is why I choose to use it.
+
     Docs: https://pydantic-docs.helpmanual.io/usage/settings/
     """
 
