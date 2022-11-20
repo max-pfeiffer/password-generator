@@ -1,13 +1,14 @@
 """
 Fast API Application
 """
+# pylint: disable=duplicate-code
+
 from fastapi import FastAPI
 
 from app.api.v1.api import api_router
 from app.app_settings import application_settings
 
 
-# pylint: disable=duplicate-code
 app = FastAPI(
     title=application_settings.application_name,
     description=application_settings.application_description,

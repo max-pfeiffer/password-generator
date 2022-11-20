@@ -16,7 +16,13 @@ SPECIAL_SYMBOLS: list[str] = list(string.punctuation)
 
 class GeneratePasswordError(Exception):
     """
-    Exception which is raise in case the password is too short.
+    Exception which is raised when there is a problem with the password_length.
+    """
+
+
+class GeneratePasswordInvalidFlagsError(Exception):
+    """
+    Exception which is raised in case of invalid flags.
     """
 
 
@@ -30,11 +36,11 @@ def generate_password(
     """
     Service for generation of passwords.
 
-    :param password_length:
-    :param password_numbers:
-    :param password_lower_case_chars:
-    :param password_upper_case_chars:
-    :param password_special_symbols:
+    :param password_length: int
+    :param password_numbers: bool
+    :param password_lower_case_chars: bool
+    :param password_upper_case_chars: bool
+    :param password_special_symbols: bool
     :return: the password string
     """
     # pylint: disable=too-many-branches
@@ -60,7 +66,7 @@ def generate_password(
     flags_set: int = sum(flags)
 
     if flags_set == 0:
-        raise GeneratePasswordError(
+        raise GeneratePasswordInvalidFlagsError(
             "At least one flag needs to be specified: password_numbers, "
             "password_lower_case_chars, password_upper_case_chars, "
             "password_special_symbols"

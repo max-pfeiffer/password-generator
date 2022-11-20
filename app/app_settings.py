@@ -23,7 +23,12 @@ class ApplicationSettings(BaseSettings):
         "A FastApi example project providing a password generator."
     )
     api_version: str = "1.0.0"
-    api_major_version_path: str = "/v1"
+    api_major_version_path: str = "/api/v1"
+    # I took the minimum password length from NIST recommendation. This is one
+    # of the very few official recommendations:
+    # https://pages.nist.gov/800-63-3/sp800-63b.html
+    # See section 5.1.1.1: for machine generated passwords a minimum length of
+    # six chars is recommended.
     min_password_length: int = 6
     max_password_length: int = 200
     default_password_length: int = 10

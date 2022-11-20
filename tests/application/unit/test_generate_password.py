@@ -12,6 +12,7 @@ from app.services import (
     UPPER_CASE_CHARS,
     SPECIAL_SYMBOLS,
     GeneratePasswordError,
+    GeneratePasswordInvalidFlagsError,
 )
 
 
@@ -51,7 +52,7 @@ def test_generate_password(
         )
         == 0
     ):
-        with pytest.raises(GeneratePasswordError):
+        with pytest.raises(GeneratePasswordInvalidFlagsError):
             generate_password(
                 password_length,
                 password_numbers,

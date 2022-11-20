@@ -20,21 +20,21 @@ def test_app_settings_defaults(monkeypatch):
     monkeypatch.delenv("PASSWORD_UPPER_CASE_CHARS", raising=False)
     monkeypatch.delenv("PASSWORD_SPECIAL_SYMBOLS", raising=False)
 
-    settings: ApplicationSettings = application_settings
+    settings: ApplicationSettings = ApplicationSettings()
 
     assert "Password Generator" == settings.application_name
     assert (
         "A FastApi example project providing a password generator."
         == settings.application_description
     )
-    assert "1.0.0" == settings.api_version
-    assert 6 == settings.min_password_length
-    assert 200 == settings.max_password_length
-    assert 10 == settings.default_password_length
-    assert settings.password_numbers
-    assert settings.password_lower_case_chars
-    assert settings.password_upper_case_chars
-    assert settings.password_special_symbols
+    assert "1.0.0" == application_settings.api_version
+    assert 6 == application_settings.min_password_length
+    assert 200 == application_settings.max_password_length
+    assert 10 == application_settings.default_password_length
+    assert application_settings.password_numbers
+    assert application_settings.password_lower_case_chars
+    assert application_settings.password_upper_case_chars
+    assert application_settings.password_special_symbols
 
 
 def test_app_settings_config(monkeypatch):
@@ -52,7 +52,7 @@ def test_app_settings_config(monkeypatch):
     monkeypatch.setenv("PASSWORD_UPPER_CASE_CHARS", "0")
     monkeypatch.setenv("PASSWORD_SPECIAL_SYMBOLS", "0")
 
-    settings: ApplicationSettings = application_settings
+    settings: ApplicationSettings = ApplicationSettings()
 
     assert 15 == settings.default_password_length
     assert not settings.password_numbers

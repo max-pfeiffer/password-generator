@@ -6,6 +6,7 @@ Tests for /passwords endpoint
 import pytest
 from furl import furl
 from httpx import Response
+from fastapi import status
 
 from app.app_settings import application_settings
 
@@ -49,4 +50,18 @@ def test_get_password(
 
     response: Response = test_client.get(url)
 
-    assert response.status_code == 200
+    # Test handling of invalid flag combination
+    if (
+        sum(
+            [
+                password_numbers,
+                password_lower_case_chars,
+                password_upper_case_chars,
+                password_special_symbols,
+            ]
+        )
+        == 0
+    ):
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+    else:
+        assert response.status_code == status.HTTP_200_OK

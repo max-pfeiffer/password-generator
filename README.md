@@ -81,3 +81,9 @@ pre-commit install
 Adding pylint to the pre-commit handler can become questionable in larger
 projects as it then runs very slow. And this can slow down commits in
 development process. But in this small example problem this is not a problem.
+
+### Run the application
+```shell
+uvicorn --host 0.0.0.0 --port 8000 app.main:app
+```
+The autodocs are then accessible on: [http://0.0.0.0:8000/docs](http://0.0.0.0:8000/docs) 
