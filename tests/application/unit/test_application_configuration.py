@@ -2,7 +2,7 @@
 Tests for Application Configuration
 """
 from app.app_settings import ApplicationSettings
-from app.main import app
+from app.main import app, application_settings
 
 
 def test_app_settings_defaults(monkeypatch):
@@ -20,7 +20,7 @@ def test_app_settings_defaults(monkeypatch):
     monkeypatch.delenv("PASSWORD_UPPER_CASE_CHARS", raising=False)
     monkeypatch.delenv("PASSWORD_SPECIAL_SYMBOLS", raising=False)
 
-    settings: ApplicationSettings = ApplicationSettings()
+    settings: ApplicationSettings = application_settings
 
     assert "Password Generator" == settings.application_name
     assert (
@@ -52,7 +52,7 @@ def test_app_settings_config(monkeypatch):
     monkeypatch.setenv("PASSWORD_UPPER_CASE_CHARS", "0")
     monkeypatch.setenv("PASSWORD_SPECIAL_SYMBOLS", "0")
 
-    settings: ApplicationSettings = ApplicationSettings()
+    settings: ApplicationSettings = application_settings
 
     assert 15 == settings.default_password_length
     assert not settings.password_numbers
