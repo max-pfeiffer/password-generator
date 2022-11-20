@@ -1,0 +1,52 @@
+name: Pipeline
+
+on: push
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt -r requirements-dev.txt
+      - name: pylint
+        run: |
+          source .venv/bin/activate
+          pylint app tests
+      - name: black
+        run: |
+          source .venv/bin/activate
+          black --check .
+
+  run-tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt -r requirements-dev.txt
+      - name: Run all tests with pytest
+        run: |
+          source .venv/bin/activate
+          pytest
+          pytest --cov=./ --cov-report=xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
