@@ -1,5 +1,26 @@
+[![codecov](https://codecov.io/gh/max-pfeiffer/password-generator/branch/main/graph/badge.svg?token=WQI2SJJLZN)](https://codecov.io/gh/max-pfeiffer/password-generator)
 # password-generator
 A FastApi example project providing a password generator.
+
+## Version Control Workflow
+For this project I choose to go for [trunk-based development](https://trunkbaseddevelopment.com/)
+as a version control management practice. The core "trunk" is here the
+projects "main" branch. The advantages outweigh the disadvantages.
+
+Advantages:
+* No need to build releases on special branches: saves time and effort for merges in the team
+* CI/CD friendly: deployments can be done easily via pipeline i.e. by simply tagging the trunk ("main" branch)
+* Enables team to do deliver frequently to production
+* Urgent hotfixes can be delivered faster
+
+Disadvantages:
+* Deliverables/Features have to be planned more thoroughly as they become deployed imediately via small feature branches
+
+Branch naming conventions:
+* main (trunk)
+* feature/{description}
+* bugfix/{description}
+* hotfix/{description}
 
 ## Local Development
 For local development Python v3.9 is required and needs to be installed.
