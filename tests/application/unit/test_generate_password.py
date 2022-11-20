@@ -5,7 +5,7 @@ Tests for Password  Generation
 
 import pytest
 
-from app.services.password import (
+from app.services import (
     generate_password,
     NUMBERS,
     LOWER_CASE_CHARS,
@@ -53,21 +53,21 @@ def test_generate_password(
     ):
         with pytest.raises(GeneratePasswordError):
             generate_password(
-                password_length=password_length,
-                password_numbers=password_numbers,
-                password_lower_case_chars=password_lower_case_chars,
-                password_upper_case_chars=password_upper_case_chars,
-                password_special_symbols=password_special_symbols,
+                password_length,
+                password_numbers,
+                password_lower_case_chars,
+                password_upper_case_chars,
+                password_special_symbols,
             )
         return
 
     # Test all the other successful cases
     password: str = generate_password(
-        password_length=password_length,
-        password_numbers=password_numbers,
-        password_lower_case_chars=password_lower_case_chars,
-        password_upper_case_chars=password_upper_case_chars,
-        password_special_symbols=password_special_symbols,
+        password_length,
+        password_numbers,
+        password_lower_case_chars,
+        password_upper_case_chars,
+        password_special_symbols,
     )
 
     assert password_length == len(password)
@@ -93,21 +93,51 @@ def test_generate_password(
         assert not any(char in password for char in SPECIAL_SYMBOLS)
 
 
-def test_generate_too_short_password():
+@pytest.mark.parametrize("password_numbers", [True, False])
+@pytest.mark.parametrize("password_lower_case_chars", [True, False])
+@pytest.mark.parametrize("password_upper_case_chars", [True, False])
+@pytest.mark.parametrize("password_special_symbols", [True, False])
+def test_generate_too_short_password(
+    password_numbers,
+    password_lower_case_chars,
+    password_upper_case_chars,
+    password_special_symbols,
+):
     """
     Test for failed password generation.
 
     :return:
     """
     with pytest.raises(GeneratePasswordError):
-        generate_password(password_length=5)
+        generate_password(
+            5,
+            password_numbers,
+            password_lower_case_chars,
+            password_upper_case_chars,
+            password_special_symbols,
+        )
 
 
-def test_generate_too_long_password():
+@pytest.mark.parametrize("password_numbers", [True, False])
+@pytest.mark.parametrize("password_lower_case_chars", [True, False])
+@pytest.mark.parametrize("password_upper_case_chars", [True, False])
+@pytest.mark.parametrize("password_special_symbols", [True, False])
+def test_generate_too_long_password(
+    password_numbers,
+    password_lower_case_chars,
+    password_upper_case_chars,
+    password_special_symbols,
+):
     """
     Test for failed password generation.
 
     :return:
     """
     with pytest.raises(GeneratePasswordError):
-        generate_password(password_length=500)
+        generate_password(
+            500,
+            password_numbers,
+            password_lower_case_chars,
+            password_upper_case_chars,
+            password_special_symbols,
+        )

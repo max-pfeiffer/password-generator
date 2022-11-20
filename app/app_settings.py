@@ -23,6 +23,7 @@ class ApplicationSettings(BaseSettings):
         "A FastApi example project providing a password generator."
     )
     api_version: str = "1.0.0"
+    api_major_version_path: str = "/v1"
     min_password_length: int = 6
     max_password_length: int = 200
     default_password_length: int = 10
@@ -38,3 +39,6 @@ class ApplicationSettings(BaseSettings):
         """
 
         env_file = ".env"
+
+
+application_settings: ApplicationSettings = ApplicationSettings()

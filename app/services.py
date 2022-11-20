@@ -6,7 +6,7 @@ Service for Password Generation
 import string
 from random import choice, choices, shuffle
 
-from app.main import application_settings
+from app.app_settings import application_settings
 
 NUMBERS: list[str] = list(string.digits)
 LOWER_CASE_CHARS: list[str] = list(string.ascii_lowercase)
@@ -21,11 +21,11 @@ class GeneratePasswordError(Exception):
 
 
 def generate_password(
-    password_length: int = None,
-    password_numbers: bool = None,
-    password_lower_case_chars: bool = None,
-    password_upper_case_chars: bool = None,
-    password_special_symbols: bool = None,
+    password_length: int,
+    password_numbers: bool,
+    password_lower_case_chars: bool,
+    password_upper_case_chars: bool,
+    password_special_symbols: bool,
 ) -> str:
     """
     Service for generation of passwords.
@@ -38,25 +38,6 @@ def generate_password(
     :return: the password string
     """
     # pylint: disable=too-many-branches
-
-    if password_length is None:
-        password_length = application_settings.default_password_length
-
-    if password_numbers is None:
-        password_numbers = application_settings.password_numbers
-
-    if password_lower_case_chars is None:
-        password_lower_case_chars = (
-            application_settings.password_lower_case_chars
-        )
-
-    if password_upper_case_chars is None:
-        password_upper_case_chars = (
-            application_settings.password_upper_case_chars
-        )
-
-    if password_special_symbols is None:
-        password_special_symbols = application_settings.password_special_symbols
 
     # Safeguard invalid password_length
     if password_length < application_settings.min_password_length:
