@@ -4,14 +4,14 @@ Service for Password Generation
 # pylint: disable=duplicate-code
 
 import string
-from random import choice, choices, shuffle
+from secrets import choice
 
 from app.app_settings import application_settings
 
-NUMBERS: list[str] = list(string.digits)
-LOWER_CASE_CHARS: list[str] = list(string.ascii_lowercase)
-UPPER_CASE_CHARS: list[str] = list(string.ascii_uppercase)
-SPECIAL_SYMBOLS: list[str] = list(string.punctuation)
+NUMBERS: str = string.digits
+LOWER_CASE_CHARS: str = string.ascii_lowercase
+UPPER_CASE_CHARS: str = string.ascii_uppercase
+SPECIAL_SYMBOLS: str = string.punctuation
 
 
 class GeneratePasswordError(Exception):
@@ -73,34 +73,37 @@ def generate_password(
         )
 
     # Generate the password
-    chars: int = password_length // flags_set
-    chars_remainder: int = password_length % flags_set
-    password: str = ""
-    fills: list[str] = []
+    alphabet: str = ""
 
     if password_numbers:
-        password += "".join(choices(NUMBERS, k=chars))
-        fills.append("".join(choices(NUMBERS, k=chars_remainder)))
+        alphabet += NUMBERS
 
     if password_lower_case_chars:
-        password += "".join(choices(LOWER_CASE_CHARS, k=chars))
-        fills.append("".join(choices(LOWER_CASE_CHARS, k=chars_remainder)))
+        alphabet += LOWER_CASE_CHARS
 
     if password_upper_case_chars:
-        password += "".join(choices(UPPER_CASE_CHARS, k=chars))
-        fills.append("".join(choices(UPPER_CASE_CHARS, k=chars_remainder)))
+        alphabet += UPPER_CASE_CHARS
 
     if password_special_symbols:
-        password += "".join(choices(SPECIAL_SYMBOLS, k=chars))
-        fills.append("".join(choices(SPECIAL_SYMBOLS, k=chars_remainder)))
+        alphabet += SPECIAL_SYMBOLS
 
-    # Fill up the password to it's full length requirement
-    fill_up: str = choice(fills)
-    password += fill_up
+    while True:
+        password = "".join(choice(alphabet) for index in range(password_length))
 
-    # Shuffle the password chars so no pattern is recognizable
-    password_list: list[str] = list(password)
-    shuffle(password_list)
-    password = "".join(password_list)
+        tests: list = []
+        if password_numbers:
+            tests.append(any(number in password for number in NUMBERS))
+
+        if password_lower_case_chars:
+            tests.append(any(char in password for char in LOWER_CASE_CHARS))
+
+        if password_upper_case_chars:
+            tests.append(any(char in password for char in UPPER_CASE_CHARS))
+
+        if password_special_symbols:
+            tests.append(any(char in password for char in SPECIAL_SYMBOLS))
+
+        if all(tests):
+            break
 
     return password
