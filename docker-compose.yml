@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      target: "production-image"
+    secrets:
+      - env_file
+    ports:
+      - "127.0.0.1:8000:8000"
+
+secrets:
+   env_file:
+     file: .env

@@ -2,6 +2,7 @@
 tests
 .coverage
 .pre-commit-config.yaml
+docker-compose.yml
 Dockerfile
 LICENSE
 pyproject.toml

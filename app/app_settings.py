@@ -46,7 +46,11 @@ class ApplicationSettings(BaseSettings):
         library.
         """
 
-        env_file = ".env"
+        # Configuration for loading the environment variables. Priority:
+        # 1. From .env file for local development
+        # 2. From /run/secrets/env_file when run with docker compose locally
+        #    (.env is configured as Docker secret)
+        env_file = ".env", "/run/secrets/env_file"
 
 
 application_settings: ApplicationSettings = ApplicationSettings()

@@ -124,3 +124,7 @@ Run the container from project root:
 ```shell
 docker run --rm -it --publish 8000:8000 password-generator:dev
 ```
+With fire application up with docker-compose:
+```shell
+docker-compose up
+```
