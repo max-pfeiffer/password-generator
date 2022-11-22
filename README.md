@@ -107,4 +107,12 @@ pytest --cov=app
 ```shell
 uvicorn --host 127.0.0.1 --port 8000 app.main:app
 ```
-The API autodocs are then accessible on: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) 
+For development purposes you can use the --reload flag for hot reloading after
+code changes:
+```shell
+uvicorn --host 127.0.0.1 --port 8000 --reload app.main:app
+```
+The applications homepage just redirects tp the API autodocs on
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). The usage of the
+password generation endpoint is documented in the autodocs. This is also a
+convenient way to try out the functionality of that endpoint.
