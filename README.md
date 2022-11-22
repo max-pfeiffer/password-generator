@@ -96,8 +96,6 @@ Run a specific test from project root:
 ```shell
 pytest tests/application/unit/test_api_endpoint_error_handler.py
 ```
-
-### Test Coverage Reports
 Create test coverage reports from project root like so:
 ```shell
 pytest --cov=app
@@ -116,3 +114,13 @@ The applications homepage just redirects tp the API autodocs on
 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). The usage of the
 password generation endpoint is documented in the autodocs. This is also a
 convenient way to try out the functionality of that endpoint.
+
+### Build and run the Docker Container
+Build the container from project root:
+```shell
+docker build --target production-image --tag password-generator:dev .
+```
+Run the container from project root:
+```shell
+docker run --rm -it --publish 8000:8000 password-generator:dev
+```

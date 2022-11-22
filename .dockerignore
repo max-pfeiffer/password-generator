@@ -1,0 +1,9 @@
+.venv
+tests
+.coverage
+.pre-commit-config.yaml
+Dockerfile
+LICENSE
+pyproject.toml
+README.md
+requirements-dev.txt
