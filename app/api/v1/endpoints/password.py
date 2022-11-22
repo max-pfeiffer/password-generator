@@ -24,7 +24,10 @@ router = APIRouter()
             "model": HTTPExceptionResponseModel
         },
     },
-    description="Returns a generated password.",
+    description="Returns a generated password. Please specify at least one of "
+    "these flags: password_numbers, password_lower_case_chars, "
+    "password_upper_case_chars or password_special_symbols. "
+    "Otherwise an error is raised.",
 )
 @api_error_handler
 def get_password(
