@@ -1,6 +1,4 @@
-"""
-API: Version 1
-"""
+"""API: Version 1"""
 from fastapi import APIRouter
 
 from app.api.v1.endpoints import password

@@ -1,6 +1,4 @@
-"""
-Tests for Application Configuration
-"""
+"""Tests for Application Configuration"""
 from app.app_settings import ApplicationSettings
 from app.main import app, application_settings
 

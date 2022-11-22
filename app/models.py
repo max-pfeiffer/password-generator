@@ -1,9 +1,12 @@
-"""
-Models
+"""Models
+
+Data models for the application.
 """
 
 # pylint: disable=no-name-in-module
 from pydantic import BaseModel, constr
+
+from app.app_settings import application_settings
 
 
 class Password(BaseModel):
@@ -16,12 +19,12 @@ class Password(BaseModel):
 
     # pylint: disable=too-few-public-methods
 
-    password: constr(max_length=200)
+    password: constr(max_length=application_settings.max_password_length)
 
 
 class HTTPExceptionResponseModel(BaseModel):
     """
-    This class is used to unify the error messages for Fast API HTTPExceptions.
+    This class is used to unify the error messages for Exceptions.
     """
 
     # pylint: disable=too-few-public-methods
@@ -33,7 +36,7 @@ class HTTPExceptionResponseModel(BaseModel):
     @classmethod
     def create_from_exception(cls, exc: Exception):
         """
-        Factory function to create am instance.
+        Factory function to create an instance.
 
         :param exc:
         :return:

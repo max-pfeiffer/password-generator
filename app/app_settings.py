@@ -1,5 +1,6 @@
-"""
-Application Settings
+"""Application Settings
+
+All settings for the application.
 """
 from pydantic import BaseSettings
 

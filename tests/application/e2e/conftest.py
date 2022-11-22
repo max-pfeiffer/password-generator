@@ -1,6 +1,4 @@
-"""
-Fixtures for Application Tests
-"""
+"""Fixtures for Application Tests"""
 import pytest
 from fastapi.testclient import TestClient
 

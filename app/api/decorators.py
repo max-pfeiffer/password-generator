@@ -1,6 +1,4 @@
-"""
-Decorators for APIs
-"""
+"""Decorators for APIs"""
 from asyncio import iscoroutinefunction
 from functools import wraps
 from typing import Callable

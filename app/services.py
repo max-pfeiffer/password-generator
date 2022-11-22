@@ -1,5 +1,8 @@
-"""
-Service for Password Generation
+"""Services
+
+Services for the application. Services are used to separate functionality
+and/or business logic from the API. They sit between API and the
+persistence layer: API - Service - Repository
 """
 # pylint: disable=duplicate-code
 
@@ -33,14 +36,18 @@ def generate_password(
     password_upper_case_chars: bool,
     password_special_symbols: bool,
 ) -> str:
-    """
-    Service for generation of passwords.
+    """Service for password generation.
 
     :param password_length: int
+        Length of the password
     :param password_numbers: bool
+        Flag, True if the password should contain numbers
     :param password_lower_case_chars: bool
+        Flag, True if the password should contain lower case chars
     :param password_upper_case_chars: bool
+        Flag, True if the password should contain upper case chars
     :param password_special_symbols: bool
+        Flag, True if the password should contain special symbols
     :return: the password string
     """
     # pylint: disable=too-many-branches

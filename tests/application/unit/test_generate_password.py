@@ -1,6 +1,4 @@
-"""
-Tests for Password  Generation
-"""
+"""Tests for Password  Generation"""
 # pylint: disable=duplicate-code
 
 import pytest

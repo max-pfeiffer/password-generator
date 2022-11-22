@@ -14,7 +14,7 @@ Advantages:
 * Urgent hotfixes can be delivered faster
 
 Disadvantages:
-* Deliverables/Features have to be planned more thoroughly as they become deployed imediately via small feature branches
+* Deliverables/Features have to be planned more thoroughly as they become deployed immediately via small feature branches
 
 Branch naming conventions:
 * main (trunk)
@@ -31,13 +31,18 @@ Python v3.9.
 ```shell
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt -r requirements-dev.txt
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
-### Add .env file
+### Add .env File
 For running the application locally with a custom configuration (also when using
 docker-compose) you need to have a ```.env``` file placed in project root.
 This file is not checked into the repo.
+
+This .env file contains the environment variables for configuring the default
+values for the password generation.
+
 You can use the ```.env-example``` as a template like so:
 ```shell
 cp .env-example .env
@@ -82,8 +87,24 @@ Adding pylint to the pre-commit handler can become questionable in larger
 projects as it then runs very slow. And this can slow down commits in
 development process. But in this small example problem this is not a problem.
 
-### Run the application
+### Run Tests
+Run all tests from project root:
 ```shell
-uvicorn --host 0.0.0.0 --port 8000 app.main:app
+pytest
 ```
-The autodocs are then accessible on: [http://0.0.0.0:8000/docs](http://0.0.0.0:8000/docs) 
+Run a specific test from project root:
+```shell
+pytest tests/application/unit/test_api_endpoint_error_handler.py
+```
+
+### Test Coverage Reports
+Create test coverage reports from project root like so:
+```shell
+pytest --cov=app
+```
+
+### Run the Application
+```shell
+uvicorn --host 127.0.0.1 --port 8000 app.main:app
+```
+The API autodocs are then accessible on: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) 

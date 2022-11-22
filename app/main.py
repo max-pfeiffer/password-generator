@@ -1,5 +1,6 @@
-"""
-Fast API Application
+"""Application
+
+Instantiation and configuration of the FastApi application.
 """
 # pylint: disable=duplicate-code
 

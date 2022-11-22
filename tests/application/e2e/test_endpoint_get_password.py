@@ -1,6 +1,4 @@
-"""
-Tests for /passwords endpoint
-"""
+"""Tests for /passwords endpoint"""
 # pylint: disable=duplicate-code
 
 import pytest

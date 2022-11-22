@@ -1,6 +1,4 @@
-"""
-Tests for api_error_handler Decorator
-"""
+"""Tests for api_error_handler Decorator"""
 # pylint: disable=duplicate-code
 
 import pytest
