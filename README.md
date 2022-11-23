@@ -2,30 +2,10 @@
 # password-generator
 A FastApi example project providing a password generator.
 
-## Version Control Workflow
-For this project I choose to go for [trunk-based development](https://trunkbaseddevelopment.com/)
-as a version control management practice. The core "trunk" is here the
-projects "main" branch. The advantages outweigh the disadvantages.
-
-Advantages:
-* No need to build releases on special branches: saves time and effort for merges in the team
-* CI/CD friendly: deployments can be done easily via pipeline i.e. by simply tagging the trunk ("main" branch)
-* Enables team to do deliver frequently to production
-* Urgent hotfixes can be delivered faster
-
-Disadvantages:
-* Deliverables/Features have to be planned more thoroughly as they become deployed immediately via small feature branches
-
-Branch naming conventions:
-* main (trunk)
-* feature/{description}
-* bugfix/{description}
-* hotfix/{description}
-
 ## Local Development
-For local development Python v3.9 is required and needs to be installed.
-This documentation assumes your current ```python``` interpreter/command is
-Python v3.9.
+Requirements:
+* Python v3.9
+* pip
 
 ### Create virtual environment and install dependencies
 ```shell
@@ -39,10 +19,8 @@ pip install -r requirements-dev.txt
 For running the application locally with a custom configuration (also when using
 docker-compose) you need to have a ```.env``` file placed in project root.
 This file is not checked into the repo.
-
 This .env file contains the environment variables for configuring the default
 values for the password generation.
-
 You can use the ```.env-example``` as a template like so:
 ```shell
 cp .env-example .env
@@ -92,9 +70,13 @@ Run all tests from project root:
 ```shell
 pytest
 ```
-Run a specific test from project root:
+Run only the tests for the application from project root:
 ```shell
-pytest tests/application/unit/test_api_endpoint_error_handler.py
+pytest tests/application
+```
+Run only the tests for the Docker image build from project root:
+```shell
+pytest tests/image_build
 ```
 Create test coverage reports from project root like so:
 ```shell
@@ -110,12 +92,8 @@ code changes:
 ```shell
 uvicorn --host 127.0.0.1 --port 8000 --reload app.main:app
 ```
-The applications homepage just redirects tp the API autodocs on
-[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). The usage of the
-password generation endpoint is documented in the autodocs. This is also a
-convenient way to try out the functionality of that endpoint.
 
-### Build and run the Docker Container
+## Build and run the Docker Container
 Build the container from project root:
 ```shell
 docker build --target production-image --tag password-generator:dev .
@@ -124,7 +102,44 @@ Run the container from project root:
 ```shell
 docker run --rm -it --publish 8000:8000 password-generator:dev
 ```
-With fire application up with docker-compose:
+Or fire application up with docker-compose:
 ```shell
 docker-compose up
 ```
+
+## Application Usage
+After firing up the application by one of the above described ways, the
+application is then available on localhost. Point your browser to
+[http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+The applications homepage just redirects to the API autodocs on
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). The usage of the
+password generation endpoint is documented in the autodocs. This is also a
+convenient way to try out the functionality of that endpoint.
+
+The API endpoint for password generation is available on
+[http://127.0.0.1:8000/api/v1/passwords](http://127.0.0.1:8000/api/v1/passwords).
+
+## Version Control Workflow
+For this project I choose to go for [trunk-based development](https://trunkbaseddevelopment.com/)
+as a version control management practice. The core "trunk" is here the
+projects "main" branch. The advantages outweigh the disadvantages.
+
+Advantages:
+* No need to build releases on special branches: saves time and effort for merges in the team
+* CI/CD friendly: deployments can be done easily via pipeline i.e. by simply tagging the trunk ("main" branch)
+* Enables team to do deliver frequently to production
+* Urgent hotfixes can be delivered faster
+
+Disadvantages:
+* Deliverables/Features have to be planned more thoroughly as they become deployed immediately via small feature branches
+
+Branch naming conventions:
+* main (trunk)
+* feature/{description}
+* bugfix/{description}
+* hotfix/{description}
+
+## Design Decisions / Best Practices 
+
+Todo

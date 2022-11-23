@@ -4,7 +4,7 @@ Instantiation and configuration of the FastApi application.
 """
 # pylint: disable=duplicate-code
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
 from fastapi.responses import RedirectResponse
 from furl import furl
 
@@ -29,7 +29,9 @@ def redirect_to_autodocs(request: Request) -> RedirectResponse:
     """
     furl_item: furl = furl(request.base_url)
     furl_item.path /= app.docs_url
-    return RedirectResponse(furl_item.url)
+    return RedirectResponse(
+        furl_item.url, status_code=status.HTTP_301_MOVED_PERMANENTLY
+    )
 
 
 app.include_router(
