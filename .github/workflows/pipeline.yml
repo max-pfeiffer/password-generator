@@ -20,7 +20,7 @@ jobs:
       - name: pylint
         run: |
           source .venv/bin/activate
-          pylint app tests
+          pylint app tests image_build
       - name: black
         run: |
           source .venv/bin/activate

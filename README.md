@@ -106,6 +106,12 @@ Or fire application up with docker-compose:
 ```shell
 docker-compose up
 ```
+You can also publish the Docker Image manually to Docker Hub if you really
+want to do so. Please be aware that you need to have set the environment
+variables that script uses in the .env file first: 
+```shell
+python -m image_build.publish
+```
 
 ## Application Usage
 After firing up the application by one of the above described ways, the
