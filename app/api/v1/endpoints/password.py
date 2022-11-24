@@ -39,19 +39,19 @@ def get_password(
     ),
     password_numbers: bool = Query(
         default=application_settings.password_numbers,
-        description="Flag, True if the password should contain numbers",
+        description="Flag, true if the password should contain numbers",
     ),
     password_lower_case_chars: bool = Query(
         default=application_settings.password_lower_case_chars,
-        description="True if the password should contain lower case chars",
+        description="Flag, true if the password should contain lower case chars",
     ),
     password_upper_case_chars: bool = Query(
         default=application_settings.password_upper_case_chars,
-        description="Flag, True if the password should contain upper case chars",
+        description="Flag, true if the password should contain upper case chars",
     ),
     password_special_symbols: bool = Query(
         default=application_settings.password_special_symbols,
-        description="Flag, True if the password should contain special symbols",
+        description="Flag, true if the password should contain special symbols",
     ),
 ) -> Password:
     """Returns a generated password.

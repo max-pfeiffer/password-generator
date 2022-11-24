@@ -33,9 +33,9 @@ def publish_docker_image() -> None:
     new_image.build(version_tag)
 
     # Log into Docker account
-    # docker_client.login(
-    #     username=docker_hub_username, password=docker_hub_password
-    # )
+    docker_client.login(
+        username=docker_hub_username, password=docker_hub_password
+    )
 
     # Push the image to Docker Hub
     for line in docker_client.images.push(

@@ -15,12 +15,18 @@ pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
 
-### Add .env File
+### Environment Variables and .env File
 For running the application locally with a custom configuration (also when using
 docker-compose) you need to have a ```.env``` file placed in project root.
-This file is not checked into the repo.
-This .env file contains the environment variables for configuring the default
-values for the password generation.
+This file is not checked into the repo. This .env file contains the following 
+environment variables for configuring the default values for the password
+generation: 
+* DEFAULT_PASSWORD_LENGTH: configures the default password length
+* PASSWORD_NUMBERS: flag, "1" if the password should contain numbers
+* PASSWORD_LOWER_CASE_CHARS: flag, "1" if the password should contain lower case chars
+* PASSWORD_UPPER_CASE_CHARS: flag, "1" if the password should contain upper case chars
+* PASSWORD_SPECIAL_SYMBOLS: flag, "1" if the password should contain special symbols
+
 You can use the ```.env-example``` as a template like so:
 ```shell
 cp .env-example .env
@@ -45,9 +51,9 @@ code review. Downside of pylint is that it produces a lot of false positives
 which need to be checked on and silenced. But I think the advantages outweigh
 the disadvantages here.
 
-Run pylint in project roo like this:
+Run pylint in project root like this:
 ```shell
-pylint app tests
+pylint app tests image_build
 ```
 
 ### Pre-commit Handler
@@ -108,7 +114,10 @@ docker-compose up
 ```
 You can also publish the Docker Image manually to Docker Hub if you really
 want to do so. Please be aware that you need to have set the environment
-variables that script uses in the .env file first: 
+variables that script uses in the .env file first:
+* DOCKER_HUB_USERNAME
+* DOCKER_HUB_PASSWORD
+* GIT_TAG_NAME
 ```shell
 python -m image_build.publish
 ```
@@ -120,11 +129,17 @@ application is then available on localhost. Point your browser to
 
 The applications homepage just redirects to the API autodocs on
 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). The usage of the
-password generation endpoint is documented in the autodocs. This is also a
-convenient way to try out the functionality of that endpoint.
+password generation endpoint is thoroughly documented in the autodocs. This
+is also a convenient way to try out the functionality of that endpoint.
 
 The API endpoint for password generation is available on
 [http://127.0.0.1:8000/api/v1/passwords](http://127.0.0.1:8000/api/v1/passwords).
+Following query parameters can be set on that endpoint:
+* password_length: int, minimum 6, maximum 200, length of the password
+* password_numbers: boolean flag, true if the password should contain numbers
+* password_lower_case_chars: boolean flag, true if the password should contain lower case chars
+* password_upper_case_chars: boolean flag, true if the password should contain upper case chars
+* password_special_symbols: boolean flag, true if the password should contain special symbols
 
 ## Version Control Workflow
 For this project I choose to go for [trunk-based development](https://trunkbaseddevelopment.com/)
@@ -146,6 +161,85 @@ Branch naming conventions:
 * bugfix/{description}
 * hotfix/{description}
 
-## Design Decisions / Best Practices 
+## CI/CD Workflow
+The CI/CD Workflow is run on GitHub with GitHub Workflow/Actions. It contains the following flows:
 
-Todo
+![](ci_cd_workflow.jpg)
+
+## Design Decisions / Best Practices
+Here I put my main considerations. A lot of details are contained as comments
+in the code.
+
+### Framework
+I choose to use FastApi as main framework because it is widely used, well
+maintained and provides everything needed for this application. It provides
+sync and async functionality out-of-the-box. Plus it relies on pydantic
+framework which provides data validation, serialisation and settings handling.
+Also, it has a self documentation feature for API endpoints which come in
+handy here as well. So I could rely on these features and had very little code
+to write here.
+Flask does not provide these features out-of-the-box and requires to write a
+lot of boilerplate code.
+
+### Development setup
+It's a good practice to do code formatting and linting from day 0 in a project.
+This results in a good quality and readable code that helps yourself and
+other developers working on the project.
+Having a pre commit handler in place contributes to this. It also makes 
+additional checks automatically that ensures other best practices like not 
+putting secrets into the repository.
+
+It is also a good practice to write tests for your code. So I put a pytest
+as test framework in place from day 0 of the project.
+The test should cover all business critical parts and other vital parts of
+the application. So I wrote some tests for a decent test coverage. It's 
+another good practice to visualise the achieved test coverage. Therefor I
+added coverage package. Test coverage can be displayed this way using the CLI.
+I also integrated with [Codecov](https://about.codecov.io/).
+
+### Application
+I choose to separate the API from the underlying functionality by using a
+service following the well known service pattern. They encapsulate
+functionality and/or business logic. They sit between API and the persistence
+layer for instance like this: API - Service - Repository
+This way it is easy to write tests for every part of the application.
+
+Versioning your API from day 0 is a good practice. Also, it's also a
+good idea to have a decorator for API endpoints to unify the error
+handling and error messages. As projects grow that saves a lot of boilerplate
+code and helps debugging an application.
+
+### Docker Image
+When building a Docker image you usually want: 
+* predictable builds
+* low build time
+* not trigger unnecessary builds/stages
+* a secure image
+* the smallest possible image
+To achieve this I applied the following best practices:
+
+#### Predictable Builds
+* Pin the root image with image digest
+* Pin the application dependencies in requirements files
+
+#### Low build time
+* Exclude everything from Docker context which is not needed for the build with a .dockerignore file
+* Separate production and development dependencies for the application with separate requirements files
+* Only build the production dependencies (requirements.txt) for the image 
+
+#### Not trigger unnecessary builds/stages 
+* Do a multistage build with a dependency build stage, so dependencies are only build when they actually change
+* Code changes do not trigger the dependency build stage
+
+#### Secure Image
+* The official Python image is used as base image which is well maintained
+* Application is run without root privileges
+
+#### Smallest possible Image
+* The slim version of the official Python image is used
+* Only the files needed for running the application are copied to the image
+
+### CI/CD Pipeline
+In a pipeline it's a common good practice to check for code quality and run
+all test before building an application or a Docker image. This way it is 
+safe guarded that the application works as expected. 
