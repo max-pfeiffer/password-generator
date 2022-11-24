@@ -146,6 +146,10 @@ Branch naming conventions:
 * bugfix/{description}
 * hotfix/{description}
 
+## CI/CD Workflow
+
+Todo
+
 ## Design Decisions / Best Practices 
 
 Todo
