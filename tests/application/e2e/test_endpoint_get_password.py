@@ -37,7 +37,7 @@ def test_get_password(
 
     # Using a URL manipulation library here as URL tinkering is a bit error-
     # prone because of syntax and character encoding
-    furl_item = furl(application_settings.api_major_version_path)
+    furl_item: furl = furl(application_settings.api_major_version_path)
     furl_item.path /= "passwords"
     furl_item.args["password_length"] = password_length
     furl_item.args["password_numbers"] = password_numbers
