@@ -16,16 +16,17 @@ pip install -r requirements-dev.txt
 ```
 
 ### Environment Variables and .env File
-For running the application locally with a custom configuration (also when using
-docker-compose) you need to have a ```.env``` file placed in project root.
-This file is not checked into the repo. This .env file contains the following 
-environment variables for configuring the default values for the password
-generation: 
+For running the application locally with a custom configuration using Uvicorn
+(also when using docker-compose) you need to have a ```.env``` file placed in
+project root. This file is not checked into the repo. This .env file contains
+the following environment variables for configuring the default values for the
+password generation: 
 * DEFAULT_PASSWORD_LENGTH: configures the default password length
 * PASSWORD_NUMBERS: flag, "1" if the password should contain numbers
 * PASSWORD_LOWER_CASE_CHARS: flag, "1" if the password should contain lower case chars
 * PASSWORD_UPPER_CASE_CHARS: flag, "1" if the password should contain upper case chars
 * PASSWORD_SPECIAL_SYMBOLS: flag, "1" if the password should contain special symbols
+You can unset a flag with "0".
 
 You can use the ```.env-example``` as a template like so:
 ```shell
@@ -37,6 +38,7 @@ I choose to add black as dependency for doing automatic code formatting.
 Manual code formatting is time-consuming. This way the software engineer can
 use his time to work on features and improvements.
 Black is also used in the CI/CD pipeline to check for correct code formatting.
+Black configuration is included in pyproject.toml.
 
 Run black to format code in project root like this:
 ```shell
@@ -50,6 +52,7 @@ can identify syntax errors and bad coding practices which could slip through
 code review. Downside of pylint is that it produces a lot of false positives
 which need to be checked on and silenced. But I think the advantages outweigh
 the disadvantages here.
+Pylint configuration is included in pyproject.toml.
 
 Run pylint in project root like this:
 ```shell
@@ -72,6 +75,7 @@ projects as it then runs very slow. And this can slow down commits in
 development process. But in this small example problem this is not a problem.
 
 ### Run Tests
+Pytest configuration is included in pyproject.toml.
 Run all tests from project root:
 ```shell
 pytest
@@ -108,10 +112,17 @@ Run the container from project root:
 ```shell
 docker run --rm -it --publish 8000:8000 password-generator:dev
 ```
+Use `--env` parameter for applying a customer configuration for the above-
+mentioned environment variables.
+
 Or fire application up with docker-compose:
 ```shell
 docker-compose up
 ```
+The `.env` file becomes picked up by docker-compose. For running the
+application with a customer configuration change the environment variables
+there.
+
 You can also publish the Docker Image manually to Docker Hub if you really
 want to do so. Please be aware that you need to have set the environment
 variables that script uses in the .env file first:
@@ -144,7 +155,7 @@ Following query parameters can be set on that endpoint:
 ## Version Control Workflow
 For this project I choose to go for [trunk-based development](https://trunkbaseddevelopment.com/)
 as a version control management practice. The core "trunk" is here the
-projects "main" branch. The advantages outweigh the disadvantages.
+projects "main" branch.
 
 Advantages:
 * No need to build releases on special branches: saves time and effort for merges in the team
@@ -154,6 +165,8 @@ Advantages:
 
 Disadvantages:
 * Deliverables/Features have to be planned more thoroughly as they become deployed immediately via small feature branches
+
+The advantages outweigh the disadvantages.
 
 Branch naming conventions:
 * main (trunk)
@@ -175,9 +188,9 @@ I choose to use FastApi as main framework because it is widely used, well
 maintained and provides everything needed for this application. It provides
 sync and async functionality out-of-the-box. Plus it relies on pydantic
 framework which provides data validation, serialisation and settings handling.
-Also, it has a self documentation feature for API endpoints which come in
-handy here as well. So I could rely on these features and had very little code
-to write here.
+Also, it has a self documentation feature for API endpoints which comes in
+handy as well. So I could rely on these features and had very little code
+to write.
 Flask does not provide these features out-of-the-box and requires to write a
 lot of boilerplate code.
 
@@ -186,28 +199,41 @@ It's a good practice to do code formatting and linting from day 0 in a project.
 This results in a good quality and readable code that helps yourself and
 other developers working on the project.
 Having a pre commit handler in place contributes to this. It also makes 
-additional checks automatically that ensures other best practices like not 
-putting secrets into the repository.
+additional checks automatically and helps to ensure that other best practices
+are followed. For instance not putting secrets into the repository.
 
-It is also a good practice to write tests for your code. So I put a pytest
-as test framework in place from day 0 of the project.
-The test should cover all business critical parts and other vital parts of
+It is also a good practice to write tests for your code. So I added pytest
+as test framework when starting the project.
+Test should cover all business critical parts and other vital parts of
 the application. So I wrote some tests for a decent test coverage. It's 
 another good practice to visualise the achieved test coverage. Therefor I
-added coverage package. Test coverage can be displayed this way using the CLI.
-I also integrated with [Codecov](https://about.codecov.io/).
+added the coverage package. Test coverage can be displayed this way using the
+CLI. I also integrated with [Codecov](https://about.codecov.io/).
+
+For configuring the development tools (Pytest, Black, Pylint), I used a
+pyproject.toml file. The advantage is that all the configurations are in one
+place and can be easily maintained.
 
 ### Application
 I choose to separate the API from the underlying functionality by using a
-service following the well known service pattern. They encapsulate
+service. Here I follow the well known service pattern. Services encapsulate
 functionality and/or business logic. They sit between API and the persistence
-layer for instance like this: API - Service - Repository
-This way it is easy to write tests for every part of the application.
+layer for instance like so: _API - Service - Repository_ This application does
+not (yet) have a persistence layer though. This way we achieve some decoupling
+and flexibility for future changes: for instance if API or data persistence
+changes, we do not necessarily have to touch the functionality/business logic.
+This way it is also easier to write tests for separate parts of the application
+especially business critical functionality. 
 
-Versioning your API from day 0 is a good practice. Also, it's also a
-good idea to have a decorator for API endpoints to unify the error
-handling and error messages. As projects grow that saves a lot of boilerplate
-code and helps debugging an application.
+I versioned the API. Versioning your API from day 0 is a good practice as it's
+just natural that additional features and API endpoints will be added in the
+future. Also, it's also a good idea to have a decorator for API endpoints to
+unify the error handling and error messages. As projects grow that saves a lot
+of boilerplate code, helps to standardise logging and helps debugging an
+application.
+
+For generating the password I followed the best practices described in the
+[official Python documention for the secrets module](https://docs.python.org/3.9/library/secrets.html).
 
 ### Docker Image
 When building a Docker image you usually want: 
@@ -216,11 +242,12 @@ When building a Docker image you usually want:
 * not trigger unnecessary builds/stages
 * a secure image
 * the smallest possible image
+
 To achieve this I applied the following best practices:
 
 #### Predictable Builds
 * Pin the root image with image digest
-* Pin the application dependencies in requirements files
+* Pin the application dependencies in requirements files to fixed versions
 
 #### Low build time
 * Exclude everything from Docker context which is not needed for the build with a .dockerignore file
@@ -229,17 +256,17 @@ To achieve this I applied the following best practices:
 
 #### Not trigger unnecessary builds/stages 
 * Do a multistage build with a dependency build stage, so dependencies are only build when they actually change
-* Code changes do not trigger the dependency build stage
+* Code changes do not trigger the dependency build stage (if dependencies have been built before once, build cache)
 
 #### Secure Image
 * The official Python image is used as base image which is well maintained
 * Application is run without root privileges
 
 #### Smallest possible Image
-* The slim version of the official Python image is used
+* The slim variant of the official Python image is used
 * Only the files needed for running the application are copied to the image
 
 ### CI/CD Pipeline
 In a pipeline it's a common good practice to check for code quality and run
 all test before building an application or a Docker image. This way it is 
-safe guarded that the application works as expected. 
+safeguarded that the application works as expected. 
