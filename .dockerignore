@@ -1,19 +1,22 @@
 # Project files
 .venv
+.github
 image_build
 tests
+.env
+.env-example
 .pre-commit-config.yaml
 docker-compose.yml
 Dockerfile
 LICENSE
 pyproject.toml
 README.md
+ci_cd_workflow.jpg
 requirements-dev.txt
 
 # Other clutter
 .DS_Store
 .idea
 .git
-.github
 .pytest_cache
 .coverage
